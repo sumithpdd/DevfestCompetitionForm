@@ -173,9 +173,11 @@ export default function GalleryPage() {
                         className="relative h-48 rounded-lg overflow-hidden bg-gray-100 cursor-pointer group"
                         onClick={() => openScreenshotDialog(submission.screenshots, 0)}
                       >
-                        <img
+                        <Image
                           src={submission.screenshots[0]}
                           alt="Project screenshot"
+                          width={400}
+                          height={300}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
@@ -197,9 +199,11 @@ export default function GalleryPage() {
                               className="relative h-16 rounded overflow-hidden cursor-pointer hover:opacity-75 transition-opacity bg-gray-100"
                               onClick={() => openScreenshotDialog(submission.screenshots, idx)}
                             >
-                              <img
+                              <Image
                                 src={screenshot}
                                 alt={`Thumbnail ${idx + 1}`}
+                                width={100}
+                                height={64}
                                 className="w-full h-full object-cover"
                               />
                               {submission.screenshots.length > 4 && idx === 3 && (
@@ -323,9 +327,11 @@ export default function GalleryPage() {
             </DialogTitle>
           </DialogHeader>
           <div className="relative">
-            <img
+            <Image
               src={selectedScreenshots[currentScreenshotIndex]}
               alt={`Screenshot ${currentScreenshotIndex + 1}`}
+              width={1200}
+              height={800}
               className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
             />
             {selectedScreenshots.length > 1 && (

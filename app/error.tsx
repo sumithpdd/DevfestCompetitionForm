@@ -26,7 +26,7 @@ export default function Error({
           </div>
           <CardTitle className="text-white text-center">Something went wrong!</CardTitle>
           <CardDescription className="text-slate-400 text-center">
-            Don't worry, you can try again.
+            Don&apos;t worry, you can try again.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

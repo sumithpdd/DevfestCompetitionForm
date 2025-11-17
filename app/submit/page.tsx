@@ -447,9 +447,11 @@ export default function SubmitPage() {
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {existingScreenshots.map((url, index) => (
                         <div key={`existing-${index}`} className="relative group">
-                          <img
+                          <Image
                             src={url}
                             alt={`Existing Screenshot ${index + 1}`}
+                            width={200}
+                            height={128}
                             className="w-full h-32 object-cover rounded-lg"
                           />
                           <button
@@ -475,9 +477,11 @@ export default function SubmitPage() {
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       {previewUrls.map((url, index) => (
                         <div key={`new-${index}`} className="relative group">
-                          <img
+                          <Image
                             src={url}
                             alt={`New Screenshot ${index + 1}`}
+                            width={200}
+                            height={128}
                             className="w-full h-32 object-cover rounded-lg"
                           />
                           <button

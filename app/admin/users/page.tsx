@@ -82,7 +82,7 @@ export default async function AdminUsersPage(props: {
                 {users.length === 0 ? (
                   <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
                     <Users className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                    <p className="text-gray-600">No users found matching "{query}"</p>
+                    <p className="text-gray-600">No users found matching &quot;{query}&quot;</p>
                     <p className="text-sm text-gray-500 mt-2">Try searching with a different name or email</p>
                   </div>
                 ) : (

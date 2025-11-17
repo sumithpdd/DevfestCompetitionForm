@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 /**
  * Check if the current user has admin role
@@ -10,14 +10,16 @@ import { auth } from "@clerk/nextjs";
  * 4. Add to "Public metadata": { "role": "admin" }
  */
 export async function isAdmin() {
-  const { userId, sessionClaims } = auth();
+  const { userId, sessionClaims } = await auth();
   
   if (!userId) {
     return false;
   }
   
   // Check if user has admin role in public metadata
-  const role = sessionClaims?.metadata?.role || sessionClaims?.publicMetadata?.role;
+  const metadata = sessionClaims?.metadata as { role?: string } | undefined;
+  const publicMetadata = sessionClaims?.publicMetadata as { role?: string } | undefined;
+  const role = metadata?.role || publicMetadata?.role;
   return role === "admin";
 }
 

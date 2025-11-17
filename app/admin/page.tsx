@@ -72,6 +72,7 @@ export default function AdminPage() {
     if (isAdmin) {
       fetchSubmissions();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
 
   const fetchSubmissions = async () => {
@@ -202,7 +203,7 @@ export default function AdminPage() {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">
-              You don't have permission to access the admin panel. Please contact an administrator.
+              You don&apos;t have permission to access the admin panel. Please contact an administrator.
             </p>
             <Link href="/">
               <Button variant="outline" className="w-full">
@@ -347,9 +348,11 @@ export default function AdminPage() {
                               className="relative h-48 rounded-lg overflow-hidden bg-gray-100 cursor-pointer hover:opacity-90 transition"
                               onClick={() => openScreenshotDialog(submission.screenshots, 0)}
                             >
-                              <img
+                              <Image
                                 src={submission.screenshots[0]}
                                 alt="Main screenshot"
+                                width={400}
+                                height={300}
                                 className="w-full h-full object-cover"
                               />
                               {submission.screenshots.length > 1 && (
@@ -368,9 +371,11 @@ export default function AdminPage() {
                                     className="relative h-16 rounded overflow-hidden cursor-pointer hover:opacity-75 transition bg-gray-100"
                                     onClick={() => openScreenshotDialog(submission.screenshots, idx)}
                                   >
-                                    <img
+                                    <Image
                                       src={screenshot}
                                       alt={`Thumbnail ${idx + 1}`}
+                                      width={100}
+                                      height={64}
                                       className="w-full h-full object-cover"
                                     />
                                   </div>
@@ -493,9 +498,11 @@ export default function AdminPage() {
             </DialogTitle>
           </DialogHeader>
           <div className="relative">
-            <img
+            <Image
               src={selectedScreenshots[currentScreenshotIndex]}
               alt={`Screenshot ${currentScreenshotIndex + 1}`}
+              width={1200}
+              height={800}
               className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
             />
             {selectedScreenshots.length > 1 && (
