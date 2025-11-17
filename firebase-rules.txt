@@ -1,0 +1,39 @@
+# Firebase Security Rules
+
+Copy these rules in Firebase Console
+
+## Firestore Rules
+Go to: Firestore Database → Rules tab
+Paste this and click Publish:
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /DevFestComp2025/{submission} {
+      // Allow public read for gallery
+      allow read: if true;
+      
+      // Allow write for all users (you're using Clerk auth, not Firebase Auth)
+      // Clerk authentication is handled at the application level
+      allow write: if true;
+    }
+  }
+}
+
+## Storage Rules
+Go to: Storage → Rules tab
+Paste this and click Publish:
+
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /devfest2025Comp/{allPaths=**} {
+      allow read: if true;
+      
+      // Allow write for all users (you're using Clerk auth, not Firebase Auth)
+      // File size limit: 10MB
+      allow write: if request.resource.size < 10 * 1024 * 1024;
+    }
+  }
+}
+
