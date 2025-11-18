@@ -46,7 +46,9 @@ Regular users can only:
 This is for creating the **very first admin** in your app.
 
 #### Step 1: Sign Up in Your App
-1. Open your app (`http://localhost:3000`)
+1. Open your app:
+   - Local: `http://localhost:3000`
+   - Production: `https://comp.devfestlondon.com`
 2. Click "Sign In"
 3. Create an account with your email
 4. Complete signup
