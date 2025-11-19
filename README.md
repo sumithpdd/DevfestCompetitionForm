@@ -1,23 +1,32 @@
 # DevFest 2025 London - AI Innovation Lab
 
-> **🚀 Competition submission platform built with Next.js, Firebase, and Clerk**
+> **🚀 Competition submission platform built with Next.js & Firebase**
 
 A modern web application for managing AI project submissions for the DevFest 2025 London AI Innovation Lab competition.
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.2-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)](https://www.typescriptlang.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-10.14-orange)](https://firebase.google.com/)
-[![Clerk](https://img.shields.io/badge/Clerk-5.7-purple)](https://clerk.com/)
+
+---
+
+## 🎉 Now With Firebase Authentication!
+
+✅ **No custom domain required** - Works perfectly on `.vercel.app`  
+✅ **Simplified deployment** - Just 6 environment variables  
+✅ **Email & Google sign-in** - Multiple authentication methods  
+✅ **Integrated stack** - Auth, database, and storage all in Firebase  
 
 ---
 
 ## ✨ Features
 
-- 🔐 **Authentication** - Secure sign-in with Clerk
+- 🔐 **Authentication** - Firebase Auth with Email/Password & Google
 - 📝 **Draft System** - Save and resume submissions
 - 📸 **Multi-Upload** - Up to 5 screenshots per project
 - 🏆 **Winner Selection** - Admin panel for selecting top 3
 - 🎯 **Interests & Social** - Profile tags and social links
+- 👥 **User Roles** - Admin, Moderator, and User roles
 - 📱 **Responsive** - Works on all devices
 - 🎨 **Modern UI** - Clean, light theme with DevFest colors
 

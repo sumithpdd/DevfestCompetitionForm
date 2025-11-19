@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useAuthContext } from "@/lib/AuthContext";
 import { collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Trophy, Github, Linkedin, Twitter, Facebook, Instagram, Globe, Trash2, ChevronLeft, ChevronRight, Users, Shield } from "lucide-react";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import {
   Select,
   SelectContent,
@@ -40,11 +41,10 @@ import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
   const router = useRouter();
-  const { user, isLoaded } = useUser();
+  const { user, userProfile } = useAuthContext();
   const { toast } = useToast();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [selectedScreenshots, setSelectedScreenshots] = useState<string[]>([]);
   const [showScreenshotDialog, setShowScreenshotDialog] = useState(false);
   const [currentScreenshotIndex, setCurrentScreenshotIndex] = useState(0);
@@ -53,27 +53,11 @@ export default function AdminPage() {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    if (isLoaded && user) {
-      // Check if user has admin role in session claims metadata
-      const role = (user.publicMetadata as any)?.role;
-      setIsAdmin(role === "admin");
-      
-      if (role !== "admin") {
-        toast({
-          title: "Access Denied",
-          description: "You don't have permission to access the admin panel",
-          variant: "destructive",
-        });
-      }
-    }
-  }, [user, isLoaded, toast]);
-
-  useEffect(() => {
-    if (isAdmin) {
+    if (user && userProfile) {
       fetchSubmissions();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin]);
+  }, [user, userProfile]);
 
   const fetchSubmissions = async () => {
     try {
@@ -183,36 +167,13 @@ export default function AdminPage() {
     );
   };
 
-  if (!isLoaded || loading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading...</p>
         </div>
-      </div>
-    );
-  }
-
-  if (!user || !isAdmin) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <Card className="max-w-md w-full">
-          <CardHeader>
-            <CardTitle className="text-red-600">Access Denied</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-600 mb-4">
-              You don&apos;t have permission to access the admin panel. Please contact an administrator.
-            </p>
-            <Link href="/">
-              <Button variant="outline" className="w-full">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
       </div>
     );
   }
@@ -224,6 +185,7 @@ export default function AdminPage() {
   };
 
   return (
+    <ProtectedRoute requireAdmin={true}>
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 shadow-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -544,5 +506,6 @@ export default function AdminPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </ProtectedRoute>
   );
 }

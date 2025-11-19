@@ -6,18 +6,9 @@ This guide explains all environment variables needed for the app and how to get 
 
 ## 📋 Required Environment Variables
 
-### Clerk (Authentication)
+### Firebase (Authentication, Database & Storage)
 
-| Variable | Description | Where to Find |
-|----------|-------------|---------------|
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Public key for Clerk client | Clerk Dashboard → API Keys |
-| `CLERK_SECRET_KEY` | Secret key for Clerk server | Clerk Dashboard → API Keys |
-
-**How to get Clerk keys:**
-1. Go to [Clerk Dashboard](https://dashboard.clerk.com)
-2. Select your application (or create new one)
-3. Click "API Keys" in left sidebar
-4. Copy both keys
+**All environment variables are for Firebase - No Clerk needed! ✅**
 
 ### Firebase (Database & Storage)
 

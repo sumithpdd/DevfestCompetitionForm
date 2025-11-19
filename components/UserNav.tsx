@@ -1,17 +1,17 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Shield, UserCog, User } from "lucide-react";
+import { useAuthContext } from "@/lib/AuthContext";
 
 export function UserNav() {
-  const { user } = useUser();
+  const { user, userProfile } = useAuthContext();
   
-  if (!user) return null;
+  if (!user || !userProfile) return null;
 
-  const role = (user.publicMetadata as any)?.role || 'user';
+  const role = userProfile.role || 'user';
 
   const getRoleBadge = () => {
     switch (role) {

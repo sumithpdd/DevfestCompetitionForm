@@ -1,12 +1,20 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, Upload, Users } from "lucide-react";
 import { UserNav } from "@/components/UserNav";
+import { UserButton } from "@/components/UserButton";
+import { AuthModal } from "@/components/AuthModal";
+import { useAuthContext } from "@/lib/AuthContext";
+import { useState } from "react";
 
 export default function Home() {
+  const { isAuthenticated } = useAuthContext();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b border-gray-200 shadow-sm">
@@ -22,18 +30,24 @@ export default function Home() {
             />
           </Link>
           <div className="flex items-center gap-4">
-            <SignedIn>
-              <UserNav />
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">Sign In</Button>
-              </SignInButton>
-            </SignedOut>
+            {isAuthenticated ? (
+              <>
+                <UserNav />
+                <UserButton />
+              </>
+            ) : (
+              <Button 
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => setShowAuthModal(true)}
+              >
+                Sign In
+              </Button>
+            )}
           </div>
         </div>
       </header>
+
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
 
       <main className="container mx-auto px-4 py-16">
         {/* Hero Banner */}
@@ -95,7 +109,7 @@ export default function Home() {
         </div>
 
         <div className="text-center space-y-6">
-          <SignedIn>
+          {isAuthenticated ? (
             <div className="space-x-4">
               <Link href="/submit">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
@@ -108,14 +122,15 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
-          </SignedIn>
-          <SignedOut>
-            <SignInButton mode="modal">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
-                Sign In to Submit
-              </Button>
-            </SignInButton>
-          </SignedOut>
+          ) : (
+            <Button 
+              size="lg" 
+              className="bg-blue-600 hover:bg-blue-700 text-white shadow-md"
+              onClick={() => setShowAuthModal(true)}
+            >
+              Sign In to Submit
+            </Button>
+          )}
         </div>
       </main>
 

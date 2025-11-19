@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
+import { useAuthContext } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,10 +17,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { UserNav } from "@/components/UserNav";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton } from "@/components/UserButton";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 export default function SubmitPage() {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useAuthContext();
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -31,8 +32,8 @@ export default function SubmitPage() {
   const [existingScreenshots, setExistingScreenshots] = useState<string[]>([]);
 
   const [formData, setFormData] = useState({
-    fullName: user?.fullName || "",
-    email: user?.emailAddresses[0]?.emailAddress || "",
+    fullName: user?.displayName || "",
+    email: user?.email || "",
     githubUrl: "",
     appPurpose: "",
     linkedinUrl: "",
@@ -53,7 +54,7 @@ export default function SubmitPage() {
       try {
         const q = query(
           collection(db, "DevFestComp2025"),
-          where("userId", "==", user.id)
+          where("userId", "==", user.uid)
         );
         const querySnapshot = await getDocs(q);
         
@@ -180,8 +181,8 @@ export default function SubmitPage() {
         ...formData,
         screenshots: screenshotUrls,
         interests: interests,
-        userId: user.id,
-        userEmail: user.emailAddresses[0]?.emailAddress,
+        userId: user.uid,
+        userEmail: user.email,
         updatedAt: new Date(),
         status: "draft",
         place: null,
@@ -258,8 +259,8 @@ export default function SubmitPage() {
         ...formData,
         screenshots: screenshotUrls,
         interests: interests,
-        userId: user.id,
-        userEmail: user.emailAddresses[0]?.emailAddress,
+        userId: user.uid,
+        userEmail: user.email,
         updatedAt: new Date(),
         status: "submitted",
         place: null,
@@ -331,24 +332,25 @@ export default function SubmitPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link href="/" className="inline-block">
-            <Image 
-              src="/devfest-london-logo.png" 
-              alt="DevFest London 2025" 
-              width={180}
-              height={60}
-              className="h-12 w-auto"
-            />
-          </Link>
-          <div className="flex items-center gap-4">
-            <UserNav />
-            <UserButton afterSignOutUrl="/" />
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gray-50">
+        <header className="bg-white border-b border-gray-200 shadow-sm">
+          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+            <Link href="/" className="inline-block">
+              <Image 
+                src="/devfest-london-logo.png" 
+                alt="DevFest London 2025" 
+                width={180}
+                height={60}
+                className="h-12 w-auto"
+              />
+            </Link>
+            <div className="flex items-center gap-4">
+              <UserNav />
+              <UserButton />
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
       <main className="container mx-auto px-4 py-16 max-w-3xl">
         {/* AI Innovation Hub Banner */}
@@ -694,6 +696,7 @@ export default function SubmitPage() {
         </Card>
       </main>
     </div>
+    </ProtectedRoute>
   );
 }
 

@@ -11,7 +11,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Github, Linkedin, Trophy, Twitter, Facebook, Instagram, Globe, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 import { UserNav } from "@/components/UserNav";
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { UserButton } from "@/components/UserButton";
+import { useAuthContext } from "@/lib/AuthContext";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 
 export default function GalleryPage() {
+  const { isAuthenticated } = useAuthContext();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedScreenshots, setSelectedScreenshots] = useState<string[]>([]);
@@ -103,10 +105,12 @@ export default function GalleryPage() {
             />
           </Link>
           <div className="flex items-center gap-4">
-            <SignedIn>
-              <UserNav />
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            {isAuthenticated && (
+              <>
+                <UserNav />
+                <UserButton />
+              </>
+            )}
           </div>
         </div>
       </header>

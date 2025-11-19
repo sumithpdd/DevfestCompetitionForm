@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
+import { AuthProvider } from "@/lib/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
@@ -21,14 +21,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${poppins.variable} font-sans antialiased bg-gray-50`}>
+    <html lang="en">
+      <body className={`${poppins.variable} font-sans antialiased bg-gray-50`}>
+        <AuthProvider>
           {children}
           <Toaster />
-        </body>
-      </html>
-    </ClerkProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }
 
