@@ -1,8 +1,10 @@
 import { Roles } from '@/types/globals'
-import { auth } from '@clerk/nextjs/server'
-
+// Note: This function is deprecated as Firebase Auth doesn't support server-side auth in the same way
+// Use client-side auth checks with useAuthContext() instead
 export const checkRole = async (role: Roles) => {
-  const { sessionClaims } = await auth()
-  return sessionClaims?.metadata.role === role
+  // This function cannot be used with Firebase Auth in server components
+  // Use ProtectedRoute component with requireAdmin prop instead
+  console.warn('checkRole is deprecated with Firebase Auth. Use client-side auth checks.')
+  return false
 }
 
