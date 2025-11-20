@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Trophy, Github, Linkedin, Twitter, Facebook, Instagram, Globe, Trash2, ChevronLeft, ChevronRight, Users, Shield } from "lucide-react";
+import { ArrowLeft, Trophy, Github, Linkedin, Twitter, Facebook, Instagram, Globe, Trash2, ChevronLeft, ChevronRight, Users, Shield, Tag } from "lucide-react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import {
   Select,
@@ -215,14 +215,24 @@ export default function AdminPage() {
               Back to Home
             </Button>
           </Link>
-          <Button 
-            onClick={() => router.push('/admin/users')}
-            variant="outline"
-            className="border-blue-600 text-blue-600 hover:bg-blue-50"
-          >
-            <Users className="w-4 h-4 mr-2" />
-            Manage User Roles
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              onClick={() => router.push('/admin/users')}
+              variant="outline"
+              className="border-blue-600 text-blue-600 hover:bg-blue-50"
+            >
+              <Users className="w-4 h-4 mr-2" />
+              Manage User Roles
+            </Button>
+            <Button 
+              onClick={() => router.push('/admin/tags')}
+              variant="outline"
+              className="border-purple-600 text-purple-600 hover:bg-purple-50"
+            >
+              <Tag className="w-4 h-4 mr-2" />
+              Manage Tags
+            </Button>
+          </div>
         </div>
 
         <div className="space-y-6">

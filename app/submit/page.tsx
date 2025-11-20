@@ -13,6 +13,7 @@ import { collection, addDoc, updateDoc, doc, query, where, getDocs } from "fireb
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import { Upload, X, Loader2, Save, Plus, Twitter, Facebook, Instagram, Globe, Linkedin } from "lucide-react";
+import { TagSelector } from "@/components/TagSelector";
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
@@ -44,7 +45,8 @@ export default function SubmitPage() {
   });
 
   const [interests, setInterests] = useState<string[]>([]);
-  const [newInterest, setNewInterest] = useState("");
+  const [expertise, setExpertise] = useState<string[]>([]);
+  const [techStack, setTechStack] = useState<string[]>([]);
 
   // Load existing draft submission if exists
   useEffect(() => {
@@ -77,6 +79,12 @@ export default function SubmitPage() {
           
           if (data.interests && data.interests.length > 0) {
             setInterests(data.interests);
+          }
+          if (data.expertise && data.expertise.length > 0) {
+            setExpertise(data.expertise);
+          }
+          if (data.techStack && data.techStack.length > 0) {
+            setTechStack(data.techStack);
           }
           
           if (data.screenshots && data.screenshots.length > 0) {
@@ -181,6 +189,8 @@ export default function SubmitPage() {
         ...formData,
         screenshots: screenshotUrls,
         interests: interests,
+        expertise: expertise,
+        techStack: techStack,
         userId: user.uid,
         userEmail: user.email,
         updatedAt: new Date(),
@@ -259,6 +269,8 @@ export default function SubmitPage() {
         ...formData,
         screenshots: screenshotUrls,
         interests: interests,
+        expertise: expertise,
+        techStack: techStack,
         userId: user.uid,
         userEmail: user.email,
         updatedAt: new Date(),
@@ -501,65 +513,28 @@ export default function SubmitPage() {
               </div>
 
               {/* Interests Section */}
-              <div className="space-y-2">
-                <Label className="text-gray-900">Interests (Optional)</Label>
-                <p className="text-sm text-gray-600 mb-2">
-                  Add your interests and skills to help others know you better
-                </p>
-                <div className="flex gap-2">
-                  <Input
-                    type="text"
-                    placeholder="e.g., AI, Machine Learning, Web Development"
-                    value={newInterest}
-                    onChange={(e) => setNewInterest(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        if (newInterest.trim() && !interests.includes(newInterest.trim())) {
-                          setInterests([...interests, newInterest.trim()]);
-                          setNewInterest("");
-                        }
-                      }
-                    }}
-                    className="bg-white border-gray-300 text-gray-900"
-                  />
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      if (newInterest.trim() && !interests.includes(newInterest.trim())) {
-                        setInterests([...interests, newInterest.trim()]);
-                        setNewInterest("");
-                      }
-                    }}
-                    variant="outline"
-                    className="shrink-0"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add
-                  </Button>
-                </div>
-                
-                {interests.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    {interests.map((interest, index) => (
-                      <Badge
-                        key={index}
-                        variant="secondary"
-                        className="bg-blue-600 text-white hover:bg-blue-700 px-3 py-1 text-sm"
-                      >
-                        {interest}
-                        <button
-                          type="button"
-                          onClick={() => setInterests(interests.filter((_, i) => i !== index))}
-                          className="ml-2 hover:text-red-400"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <TagSelector
+                category="interests"
+                selectedTags={interests}
+                onChange={setInterests}
+                label="Your Interests"
+              />
+
+              {/* Expertise Section */}
+              <TagSelector
+                category="expertise"
+                selectedTags={expertise}
+                onChange={setExpertise}
+                label="Your Expertise"
+              />
+
+              {/* Tech Stack Section */}
+              <TagSelector
+                category="techStack"
+                selectedTags={techStack}
+                onChange={setTechStack}
+                label="Technology Stack"
+              />
 
               {/* Social Links Section */}
               <div className="space-y-4">

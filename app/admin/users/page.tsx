@@ -45,7 +45,7 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const usersSnapshot = await getDocs(collection(db, 'users'))
+      const usersSnapshot = await getDocs(collection(db, 'CompetitionUsers'))
       const usersList = usersSnapshot.docs.map(doc => ({
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate() || new Date(),
@@ -67,7 +67,7 @@ export default function AdminUsersPage() {
 
   const updateUserRole = async (userId: string, newRole: 'admin' | 'moderator' | 'user') => {
     try {
-      await updateDoc(doc(db, 'users', userId), {
+      await updateDoc(doc(db, 'CompetitionUsers', userId), {
         role: newRole,
         updatedAt: new Date(),
       })

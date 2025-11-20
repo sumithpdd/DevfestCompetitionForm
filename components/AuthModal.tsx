@@ -65,7 +65,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           displayName: displayName,
         });
       }
-
+      
       toast({
         title: "Success!",
         description: "Account created successfully",
@@ -75,9 +75,20 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       setPassword("");
       setDisplayName("");
     } catch (error: any) {
+      let errorMessage = error.message || "Failed to create account";
+      
+      // Provide user-friendly error messages
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = "This email is already registered. Try signing in instead.";
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = "Password is too weak. Use at least 6 characters.";
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = "Invalid email address.";
+      }
+      
       toast({
         title: "Error",
-        description: error.message || "Failed to create account",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -88,6 +99,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     const provider = new GoogleAuthProvider();
+    
+    // Force account selection
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    });
 
     try {
       await signInWithPopup(auth, provider);
@@ -97,9 +113,20 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       });
       onClose();
     } catch (error: any) {
+      let errorMessage = error.message || "Failed to sign in with Google";
+      
+      // Provide more helpful error messages
+      if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = "Sign-in cancelled. Please try again.";
+      } else if (error.code === 'auth/popup-blocked') {
+        errorMessage = "Popup blocked. Please allow popups for this site.";
+      } else if (error.code === 'auth/unauthorized-domain') {
+        errorMessage = "This domain is not authorized. Please check Firebase settings.";
+      }
+      
       toast({
         title: "Error",
-        description: error.message || "Failed to sign in with Google",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

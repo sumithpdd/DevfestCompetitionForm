@@ -18,7 +18,7 @@ export interface UserProfile {
  */
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
   try {
-    const userDoc = await getDoc(doc(db, "users", uid));
+    const userDoc = await getDoc(doc(db, "CompetitionUsers", uid));
     if (userDoc.exists()) {
       const data = userDoc.data();
       return {
@@ -39,33 +39,42 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
 
 /**
  * Create or update user profile in Firestore
- * This is called when a user signs in for the first time or updates their profile
+ * This is called automatically when a user signs in or signs up
  */
 export async function createOrUpdateUserProfile(user: User): Promise<void> {
+  if (!user || !user.uid) {
+    console.error('Cannot create profile: Invalid user object');
+    return;
+  }
+
   try {
-    const userRef = doc(db, "users", user.uid);
+    const userRef = doc(db, "CompetitionUsers", user.uid);
     const userDoc = await getDoc(userRef);
     
     if (!userDoc.exists()) {
       // Create new user profile with default role
-      await setDoc(userRef, {
+      const newUserData = {
         uid: user.uid,
-        email: user.email,
-        displayName: user.displayName,
+        email: user.email || null,
+        displayName: user.displayName || user.email?.split('@')[0] || 'User',
         role: "user",
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
+      };
+      
+      await setDoc(userRef, newUserData);
     } else {
       // Update existing user profile
-      await setDoc(userRef, {
+      const updates = {
         email: user.email,
-        displayName: user.displayName,
+        displayName: user.displayName || userDoc.data().displayName,
         updatedAt: new Date(),
-      }, { merge: true });
+      };
+      
+      await setDoc(userRef, updates, { merge: true });
     }
-  } catch (error) {
-    console.error("Error creating/updating user profile:", error);
+  } catch (error: any) {
+    console.error("Error creating/updating user profile:", error.code || error.message);
   }
 }
 
@@ -74,7 +83,7 @@ export async function createOrUpdateUserProfile(user: User): Promise<void> {
  * 
  * To set up admin users:
  * 1. Go to Firebase Console → Firestore Database
- * 2. Find the user document in 'users' collection
+ * 2. Find the user document in 'CompetitionUsers' collection
  * 3. Update the 'role' field to 'admin'
  */
 export async function isAdmin(uid: string): Promise<boolean> {
